@@ -26,6 +26,10 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
+  async findOneAuth(email: string): Promise<User | null> {
+    return await this.userModel.findOne({ email }).exec();
+  }
+
   async deleteUser(userId: string): Promise<void> {
     const deletedUser = await this.userModel.findByIdAndDelete(userId);
     if (!deletedUser) {

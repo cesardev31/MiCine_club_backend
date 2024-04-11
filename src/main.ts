@@ -13,7 +13,7 @@ async function bootstrap() {
     .addTag('auth')
     .addTag('uploads')
     .build();
-    
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
   await app.listen(port);

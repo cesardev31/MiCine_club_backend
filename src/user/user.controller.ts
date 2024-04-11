@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('user')
@@ -23,12 +14,12 @@ export class UserController {
   }
 
   @Get()
- async findAll() {
+  async findAll() {
     return this.userService.findAll();
   }
 
   @Delete('/:id')
-  async delete(@Param('id') _id: string) { 
-    return this.userService.deleteUser(_id); 
+  async delete(@Param('id') _id: string) {
+    return this.userService.deleteUser(_id);
   }
 }
