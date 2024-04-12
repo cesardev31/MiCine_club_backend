@@ -3,6 +3,18 @@
 /node_modules
 /build
 
+#media
+public/
+public/img/
+public/movie/
+public/trailer/
+
+!public/.gitkeep
+!public/movie/.gitkeep
+!public/img/.gitkeep
+!public/trailer/.gitkeep
+
+
 # Logs
 logs
 *.log

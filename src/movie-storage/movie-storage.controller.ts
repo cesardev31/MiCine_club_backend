@@ -1,34 +1,70 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseInterceptors,
+  UploadedFiles,
+  BadRequestException,
+  Body,
+} from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import { MovieStorageService } from './movie-storage.service';
+import { FileFieldsInterceptor } from '@nestjs/platform-express/multer';
 import { CreateMovieStorageDto } from './dto/create-movie-storage.dto';
-import { UpdateMovieStorageDto } from './dto/update-movie-storage.dto';
 
-@Controller('movie-storage')
+@Controller('api/v1/movie')
 export class MovieStorageController {
   constructor(private readonly movieStorageService: MovieStorageService) {}
 
-  @Post()
-  create(@Body() createMovieStorageDto: CreateMovieStorageDto) {
-    return this.movieStorageService.create(createMovieStorageDto);
+  @Post('upload')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'portada', maxCount: 1 },
+      { name: 'movie', maxCount: 1 },
+      { name: 'trailer', maxCount: 1 },
+    ]),
+  )
+  async uploadFile(
+    @UploadedFiles()
+    files: {
+      portada?: Express.Multer.File[];
+      movie?: Express.Multer.File[];
+      trailer?: Express.Multer.File[];
+    },
+    @Body() createMovieStorageDto: CreateMovieStorageDto,
+  ): Promise<any> {
+    if (!files.portada || !files.movie || !files.trailer) {
+      throw new BadRequestException('Todos los archivos son requeridos');
+    } else {
+      try {
+        const movieData = {
+          ...createMovieStorageDto,
+          url_portada: this.getFileUrl(files.portada[0], 'img'),
+          url_movie: this.getFileUrl(files.movie[0], 'movie'),
+          url_trailer: this.getFileUrl(files.trailer[0], 'trailer'),
+        };
+        console.log(movieData);
+
+        await this.movieStorageService.create(movieData);
+
+        return { message: 'Archivos subidos y datos guardados exitosamente' };
+      } catch (error) {
+        console.log(error);
+        throw new Error('Error al subir los archivos y guardar los datos');
+      }
+    }
   }
 
-  @Get()
-  findAll() {
-    return this.movieStorageService.findAll();
-  }
+  private getFileUrl(file: Express.Multer.File, folder: string): string {
+    const fileId = uuidv4();
+    const fileExtension = path.extname(file.originalname);
+    const fileName = `${fileId}${fileExtension}`;
+    const filePath = path.join(`./public/${folder}/${fileName}`);
+    const fileUrl = `${process.env.URL_SERVIDOR}/${folder}/${fileName}`;
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.movieStorageService.findOne(+id);
-  }
+    fs.writeFileSync(filePath, file.buffer);
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMovieStorageDto: UpdateMovieStorageDto) {
-    return this.movieStorageService.update(+id, updateMovieStorageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.movieStorageService.remove(+id);
+    return fileUrl;
   }
 }
