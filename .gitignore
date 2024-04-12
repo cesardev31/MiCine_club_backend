@@ -4,10 +4,9 @@
 /build
 
 #media
-public/
-public/img/
-public/movie/
-public/trailer/
+public/img/*
+public/movie/*
+public/trailer/*
 
 !public/.gitkeep
 !public/movie/.gitkeep
