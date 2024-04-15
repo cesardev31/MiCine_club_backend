@@ -22,7 +22,7 @@ export class AuthService {
         });
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
-      
+
       if (passwordMatch) {
         const payload = { sub: user._id, username: user.full_name };
         return {
@@ -34,7 +34,7 @@ export class AuthService {
       });
     } catch (error) {
       console.log(error);
-      
+
       throw new Error(error);
     }
   }

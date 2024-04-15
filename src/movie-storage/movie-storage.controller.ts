@@ -44,8 +44,6 @@ export class MovieStorageController {
           url_movie: this.getFileUrl(files.movie[0], 'movie'),
           url_trailer: this.getFileUrl(files.trailer[0], 'trailer'),
         };
-        console.log(movieData);
-
         await this.movieStorageService.create(movieData);
 
         return { message: 'Archivos subidos y datos guardados exitosamente' };

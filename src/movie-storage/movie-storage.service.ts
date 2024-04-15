@@ -6,7 +6,9 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class MovieStorageService {
-  constructor(@InjectModel(Movie.name)private readonly MovieModel: Model<MovieDocument>) {}
+  constructor(
+    @InjectModel(Movie.name) private readonly MovieModel: Model<MovieDocument>,
+  ) {}
 
   async create(createMovieStorageDto: CreateMovieStorageDto): Promise<Movie> {
     const createdMovie = new this.MovieModel({
@@ -15,6 +17,4 @@ export class MovieStorageService {
     });
     return createdMovie.save();
   }
-
- 
 }

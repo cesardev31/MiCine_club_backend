@@ -16,13 +16,13 @@ export class AuthController {
 
   @Post()
   async create(@Body() singInDto: SignInDto) {
-    const { email, password } = singInDto; 
+    const { email, password } = singInDto;
     try {
       const token = await this.authService.signIn(email, password);
       return token;
     } catch (error) {
       console.log(error);
-      
+
       throw new HttpException(
         'credenciales invalidas',
         HttpStatus.UNAUTHORIZED,
