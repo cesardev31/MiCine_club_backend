@@ -1,12 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  AUTH_PROVIDERS,
-  TDependencies,
-  TToolsAuths,
-  buildAuth,
-} from '../../app/services';
+import { AUTH_PROVIDERS, TToolsAuths } from '../../app/services';
 import { TAuthDOM } from '../../domain/entities';
-import * as bcrypt from 'bcrypt';
+//import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -21,11 +16,11 @@ export class AuthServices {
   }
 
   async auth(auth: TAuthDOM): Promise<{ token: string }> {
-    const hashedPassword = await bcrypt.hash(auth.password, 10);
-    const authData: TAuthDOM = {
+    //const hashedPassword = await bcrypt.hash(auth.password, 10);
+    /* const authData: TAuthDOM = {
       email: auth.email,
       password: hashedPassword,
-    };
+    }; */
 
     const tokenPayload = { email: auth.email };
     const token = await this.generateJWTToken(tokenPayload);

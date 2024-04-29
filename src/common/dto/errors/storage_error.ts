@@ -2,12 +2,12 @@ import { HttpErrorCode } from '../enums/errors_enum';
 import { BaseError } from './base_error';
 
 export class StorageError extends BaseError {
-    constructor(metadata?: any) {
-        super(
-            'Storage error',
-            HttpErrorCode.INTERNAL_SERVER_ERROR,
-            HttpErrorCode.BAD_REQUEST,
-            metadata,
-        );
-    }
+  constructor(metadata?: any) {
+    super(
+      'Storage error',
+      HttpErrorCode.INTERNAL_SERVER_ERROR,
+      HttpErrorCode.BAD_REQUEST,
+      metadata,
+    );
+  }
 }
